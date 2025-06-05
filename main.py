@@ -190,7 +190,7 @@ def create_game_embed(game_data: dict, players_info: list) -> discord.Embed:
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} la fine lame est connecté !')
+    print(f"{bot.user} Tapis dans l'ombre !")
     
 # Démarrage du bot et load du token dans .env
 
@@ -299,8 +299,15 @@ async def help_command(ctx):
     await ctx.send(embed=embed)
 
 @bot.command(name='clown')
+@commands.cooldown(1, 30, commands.BucketType.user)
 async def clown_command(ctx):
+    """Affiche un bronze 4 à l'écran"""
     await ctx.send(get_clown_ascii())
+
+@clown_command.error
+async def clown_command_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f"🕒 Arrête de spam bâtard ! attends {error.retry_after:.1f} secondes.")
 
 # Lancement du bot
 if __name__ == "__main__":
