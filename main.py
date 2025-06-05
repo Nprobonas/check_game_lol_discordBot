@@ -5,6 +5,8 @@ import aiohttp
 import asyncio
 from typing import Optional
 from dotenv import load_dotenv
+from smurf import SmurfDetector
+from clown import get_clown_ascii
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -113,7 +115,7 @@ def create_player_embed(summoner_data: dict, rank_data: dict) -> discord.Embed:
         # Émoji selon le rang
         rank_emoji = {
             'IRON': '🤎', 'BRONZE': '🥉', 'SILVER': '🥈', 'GOLD': '🥇',
-            'PLATINUM': '💎', 'DIAMOND': '💎', 'MASTER': '👑',
+            'PLATINUM': '💎', 'EMERALD': '', 'DIAMOND': '💎', 'MASTER': '👑',
             'GRANDMASTER': '👑', 'CHALLENGER': '🏆'
         }.get(tier, '❓')
         
@@ -161,7 +163,7 @@ def create_game_embed(game_data: dict, players_info: list) -> discord.Embed:
                 lp = rank_info.get('leaguePoints', 0)
                 rank_emoji = {
                     'IRON': '🤎', 'BRONZE': '🥉', 'SILVER': '🥈', 'GOLD': '🥇',
-                    'PLATINUM': '💎', 'DIAMOND': '💎', 'MASTER': '👑',
+                    'PLATINUM': '💎', 'EMERALD': '', 'DIAMOND': '💎', 'MASTER': '👑',
                     'GRANDMASTER': '👑', 'CHALLENGER': '🏆'
                 }.get(tier, '❓')
                 team_text += f"{rank_emoji} {player['summonerName']} - {tier.title()} {rank} ({lp} LP)\n"
@@ -202,6 +204,8 @@ if not token:
 #     print("Echech de Connexion")
 # except Exception as e:
 #     print(f"Erreur survenue : {e}")
+
+smurf = SmurfDetector()
 
 @bot.command(name='lookup')
 async def lookup_player(ctx, *, summoner_name: str):
@@ -293,6 +297,10 @@ async def help_command(ctx):
     )
     
     await ctx.send(embed=embed)
+
+@bot.command(name='clown')
+async def clown_command(ctx):
+    await ctx.send(get_clown_ascii())
 
 # Lancement du bot
 if __name__ == "__main__":
