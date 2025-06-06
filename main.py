@@ -263,6 +263,20 @@ async def help_command(ctx):
     await ctx.send(embed=embed)
     
     
+@bot.command(name='help_price')
+async def help_price(ctx):
+    embed = discord.Embed(
+        title="Commandes du watcher prix cryptos",
+        description="**IMPORTANT** :  Utilise !price [nom_crypto] afin d'afficher le prix et le sentiment du marché",
+        color=0x00ff00
+    )
+    embed.add_field(
+        name="!price [SOL]",
+        value="Affiche les informations et le sentiment du marché sur un symbol crypto",
+        inline=False
+    )
+    await ctx.send(embed=embed)
+    
 
 async def main():
     #Endroit pour charger les Cogs Discord
