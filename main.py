@@ -5,7 +5,6 @@ import aiohttp
 import asyncio
 from typing import Optional
 from dotenv import load_dotenv
-
 import urllib.parse
 
 # Charger les variables d'environnement
@@ -19,6 +18,8 @@ intents.message_content = True
 
 # Création du bot
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+
 
 class RiotAPI:
     def __init__(self, api_key: str):
@@ -166,6 +167,7 @@ def create_game_embed(game_data: dict, players_info: list) -> discord.Embed:
         )
     return embed
 
+# Event du démarrage du bot
 @bot.event
 async def on_ready():
     print(f'{bot.user} la fine lame est connecté !')
@@ -252,7 +254,24 @@ async def help_command(ctx):
         value="Affiche cette aide",
         inline=False
     )
+    embed.add_field(
+        name="!clown",
+        value="Affiche à l'écran un jungler de la faille",
+        inline=False
+    )
     await ctx.send(embed=embed)
+    
+    
+
+async def main():
+    #Endroit pour charger les Cogs Discord
+    await bot.load_extension("clown_cog")
+    print("Cog chargé avec succès !")
+    # Start du bot via le token Discord
+    await bot.start(DISCORD_TOKEN)
 
 if __name__ == "__main__":
-    bot.run(DISCORD_TOKEN)
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Déconnexion \nKrabinoche retourne dans les abysses..")
