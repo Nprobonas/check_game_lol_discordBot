@@ -7,6 +7,7 @@ from typing import Optional
 from dotenv import load_dotenv
 import urllib.parse
 
+
 # Charger les variables d'environnement
 load_dotenv()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
@@ -266,7 +267,8 @@ async def help_command(ctx):
 async def main():
     #Endroit pour charger les Cogs Discord
     await bot.load_extension("clown_cog")
-    print("Cog chargé avec succès !")
+    await bot.load_extension("cogs.price_watcher_cog")
+    print("Cogs chargés avec succès !")
     # Start du bot via le token Discord
     await bot.start(DISCORD_TOKEN)
 
