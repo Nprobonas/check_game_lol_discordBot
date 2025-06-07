@@ -73,10 +73,14 @@ class RiotAPI:
             async with session.get(url, headers=self.headers) as response:
                 if response.status == 200:
                     return await response.json()
+                elif response.status == 403:
+                    print("La commande !game est bloquée par RIOT sauf pour les comptes partners...")
+                    return {"error":"Accès interdit"}
                 else:
                     print(f"Erreur Spectator API : status {response.status} url {url}")
                     print(await response.text())
                     return None
+                
 
 riot_api = RiotAPI(RIOT_API_KEY)
 
@@ -219,7 +223,7 @@ async def current_game(ctx, *, riot_id: str):
 
     game_data = await riot_api.get_current_game(summoner_data['id'])
     if not game_data:
-        await loading_msg.edit(content="❌ Aucune partie en cours !")
+        await loading_msg.edit(content="❌ La commande !game est bloquée par RIOT sauf pour les comptes partenaires...")
         return
 
     players_info = []
@@ -247,7 +251,7 @@ async def help_command(ctx):
     )
     embed.add_field(
         name="!game [GameName#TagLine]",
-        value="Analyse la partie en cours d'un joueur",
+        value="(Déprécié) Analyse la partie en cours d'un joueur",
         inline=False
     )
     embed.add_field(
