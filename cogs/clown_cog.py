@@ -10,7 +10,7 @@ class ClownCog(commands.Cog):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def clown(self, ctx):
         """Commande d'affichage d'un jungler de la faille"""
-        image_path = os.path.join(os.path.dirname(__file__), "image/clown.webp")
+        image_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "image", "clown.webp")
         texte_intro = "Red nose, big foot, yellow jacket.."
         with open(image_path, "rb") as f:
             file = discord.File(f, filename="clown.webp")
