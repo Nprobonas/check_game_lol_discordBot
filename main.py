@@ -284,7 +284,7 @@ async def help_price(ctx):
 
 async def main():
     #Endroit pour charger les Cogs Discord
-    await bot.load_extension("clown_cog")
+    await bot.load_extension("cogs.clown_cog")
     await bot.load_extension("cogs.price_watcher_cog")
     print("Cogs chargés avec succès !")
     # Start du bot via le token Discord
