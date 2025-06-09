@@ -52,7 +52,7 @@ class PriceMonitorBot(commands.Cog):
             response.raise_for_status()
             data = response.json()
 
-            # On cherche le vrai Bitcoin (id: 1) dans la liste des résultats
+            # On cherche le vrai Bitcoin (id: 1) dans la liste des résultats -> pour toutes les autres paires init à 0.
             crypto_data = data['data'][symbol][0]
         
             if crypto_data:
@@ -77,9 +77,7 @@ class PriceMonitorBot(commands.Cog):
         
 
     def analyze_market_sentiment(self, info: CryptoPriceWatcher) -> str:
-        """
-        Analyse simple du sentiment du marché
-        """
+        """ Analyse simple du sentiment du marché """
         sentiment = []
         
         # Analyse du prix et des variations
@@ -101,33 +99,35 @@ class PriceMonitorBot(commands.Cog):
     
     
     # Init des commandes
-    @commands.command(name='price')
-    #@commands.cooldown(1, 5, commands.BucketType.user)
-    async def price(self, ctx, symbol: str):
-        # Debug
+    # Debug
         #print("Commande !price appelée avec:", symbol)
         #await ctx.send("Debug: commande appelée")
+        
+    @commands.command(name='price')
+    async def price(self, ctx, *symbols):
         """Commande d'affichage en temps réel du prix du BTC"""
-        data = self.get_crypto_info(symbol.upper())
-        
-        if not data:
-            await ctx.send(f"Impossible de récupérer le prix pour le symbol {symbol.upper()}.")
+        if not symbols:
+            await ctx.send("Il faut au moins un symbole afin de lancer la recherche, exemple -> !price ETH")
             return
-        
-        
-        sentiment = self.analyze_market_sentiment(data)
-        embed = discord.Embed(
-        title=f"Prix du {symbol.upper()}",
-        description=f"**Prix :** {data.price:,.2f} $",
-        color=0xFFD700
-        )
-        embed.add_field(name="Variation 24h", value=f"{data.change_24h:+.2f} %")
-        embed.add_field(name="Variation 7j", value=f"{data.change_7d:+.2f} %")
-        embed.add_field(name="Volume 24h", value=f"{data.volume_24h:,.0f} $")
-        embed.add_field(name="Market Cap", value=f"{data.market_cap:,.0f} $")
-        embed.add_field(name="Sentiment", value=sentiment, inline=False)
-        embed.set_footer(text=f"Dernière mise à jour : {data.timestamp.strftime('%d/%m/%Y %H:%M:%S')}")
-        await ctx.send(embed=embed)
+
+        for symbol in symbols:
+            data = self.get_crypto_info(symbol.upper())
+            if data:
+                sentiment = self.analyze_market_sentiment(data)
+                embed = discord.Embed(
+                    title=f"Prix du {symbol.upper()}",
+                    description=f"**Prix :** {data.price:,.2f} $",
+                    color=0xFFD700
+                )
+                embed.add_field(name="Variation 24h", value=f"{data.change_24h:+.2f} %")
+                embed.add_field(name="Variation 7j", value=f"{data.change_7d:+.2f} %")
+                embed.add_field(name="Volume 24h", value=f"{data.volume_24h:,.0f} $")
+                embed.add_field(name="Market Cap", value=f"{data.market_cap:,.0f} $")
+                embed.add_field(name="Sentiment", value=sentiment, inline=False)
+                embed.set_footer(text=f"Dernière mise à jour : {data.timestamp.strftime('%d/%m/%Y %H:%M:%S')}")
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f"❌ Impossible de récupérer le prix pour {symbol.upper()}.")
         
         
     @price.error
