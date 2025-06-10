@@ -151,7 +151,7 @@ def create_game_embed(game_data: dict, players_info: list) -> discord.Embed:
                 lp = rank_info.get('leaguePoints', 0)
                 rank_emoji = {
                     'IRON': '🤎', 'BRONZE': '🥉', 'SILVER': '🥈', 'GOLD': '🥇',
-                    'PLATINUM': '💎', 'DIAMOND': '💎', 'MASTER': '👑',
+                    'PLATINUM': '💎', 'EMERALD': '<3', 'DIAMOND': '💎', 'MASTER': '👑',
                     'GRANDMASTER': '👑', 'CHALLENGER': '🏆'
                 }.get(tier, '❓')
                 team_text += f"{rank_emoji} {player['summonerName']} - {tier.title()} {rank} ({lp} LP)\n"
