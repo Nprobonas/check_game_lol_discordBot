@@ -286,6 +286,7 @@ async def main():
     #Endroit pour charger les Cogs Discord
     await bot.load_extension("cogs.clown_cog")
     await bot.load_extension("cogs.price_watcher_cog")
+    await bot.load_extension("cogs.fng_cog")
     print("Cogs chargés avec succès !")
     # Start du bot via le token Discord
     await bot.start(DISCORD_TOKEN)
