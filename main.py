@@ -175,7 +175,7 @@ def create_game_embed(game_data: dict, players_info: list) -> discord.Embed:
 # Event du démarrage du bot
 @bot.event
 async def on_ready():
-    print(f'{bot.user} la fine lame est connecté !')
+    print(f'{bot.user} le Krab jusiticer est connecté !')
 
 @bot.command(name='lookup')
 async def lookup_player(ctx, *, riot_id: str):
