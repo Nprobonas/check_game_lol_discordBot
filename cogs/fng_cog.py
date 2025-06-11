@@ -12,12 +12,12 @@ class Fng(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.base_url = "https://pro-api.coinmarketcap.com/v2"
-        self.api_key = os.getenv('CMC_API_KEY')
-        self.headers = {
-            'X-CMC_PRO_API_KEY': self.api_key,
+        # self.base_url = "https://pro-api.coinmarketcap.com/v2"
+        # self.api_key = os.getenv('CMC_API_KEY')
+        # self.headers = {
+        #     'X-CMC_PRO_API_KEY': self.api_key,
         
-        }
+        # }
         
     @commands.command(name='fng')
     async def fear_and_greed(self, ctx):
