@@ -40,20 +40,24 @@ class PriceMonitorBot(commands.Cog):
             'symbol': symbol,
             'convert': 'USD'
         }
-       
-            
         try:
             response = requests.get(
                 f"{self.base_url}{endpoint}",
                 headers=self.headers,
                 params=params
             )
-
             response.raise_for_status()
             data = response.json()
 
             # On cherche le vrai Bitcoin (id: 1) dans la liste des résultats -> pour toutes les autres paires init à 0.
-            crypto_data = data['data'][symbol][0]
+            crypto_raw = data['data'][symbol]
+            if isinstance(crypto_raw, list):
+                crypto_data = crypto_raw[0]
+            elif isinstance(crypto_raw, dict):
+                crypto_data = crypto_raw
+            else:
+                print("Problème avec API:", type(crypto_raw))
+                return None
         
             if crypto_data:
                 quote = crypto_data['quote']['USD']
@@ -74,7 +78,31 @@ class PriceMonitorBot(commands.Cog):
         except Exception as e:
             print(f"Erreur lors de la requête: {e}")
             return None
-        
+
+
+    def get_crypto_logo(self, symbol):
+        endpoint = "/cryptocurrency/info"
+        params = {'symbol': symbol}
+        try:
+            response = requests.get(
+                f"{self.base_url}{endpoint}",
+                headers=self.headers,
+                params=params
+            )
+            response.raise_for_status()
+            data = response.json()
+            symbol_data = data['data'][symbol]
+            if isinstance(symbol_data, list):
+                logo_url = symbol_data[0]['logo']
+            elif isinstance(symbol_data,dict):
+                logo_url = symbol_data['logo']
+            else:
+                logo_url = None
+            return logo_url
+        except Exception as e:
+            print(f"Erreur lors de la récupération du logo : {e}")
+            return None
+
 
     def analyze_market_sentiment(self, info: CryptoPriceWatcher) -> str:
         """ Analyse simple du sentiment du marché """
@@ -111,14 +139,22 @@ class PriceMonitorBot(commands.Cog):
             return
 
         for symbol in symbols:
+           # print(f"[DEBUG] Recherche symbol: {symbol}")
             data = self.get_crypto_info(symbol.upper())
+            logo_url = self.get_crypto_logo(symbol.upper())
+           # print(f"[DEBUG] Résult data : {data}")
+           # print(f"[DEBUG] Result logo_url: {logo_url}")
+            
             if data:
                 sentiment = self.analyze_market_sentiment(data)
                 embed = discord.Embed(
                     title=f"Prix du {symbol.upper()}",
                     description=f"**Prix :** {data.price:,.2f} $",
-                    color=0xFFD700
+                    color= 0x4682B4 # Bleu acier
                 )
+                if logo_url:
+                    embed.set_thumbnail(url=logo_url)
+                    
                 embed.add_field(name="Variation 24h", value=f"{data.change_24h:+.2f} %")
                 embed.add_field(name="Variation 7j", value=f"{data.change_7d:+.2f} %")
                 embed.add_field(name="Volume 24h", value=f"{data.volume_24h:,.0f} $")
@@ -127,13 +163,13 @@ class PriceMonitorBot(commands.Cog):
                 embed.set_footer(text=f"Dernière mise à jour : {data.timestamp.strftime('%d/%m/%Y %H:%M:%S')}")
                 await ctx.send(embed=embed)
             else:
-                await ctx.send(f"❌ Impossible de récupérer le prix pour {symbol.upper()}.")
+                await ctx.send(f"❌ Erreur API -> Impossible de récupérer le prix pour {symbol.upper()}.")
         
         
-    @price.error
-    async def price_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(f"🕒 Arrête de spam bâtard ! Attends {error.retry_after:.1f} secondes avant de réutiliser !price.")
+    # @price.error
+    # async def price_error(self, ctx, error):
+    #     if isinstance(error, commands.CommandOnCooldown):
+    #         await ctx.send(f"🕒 Arrête de spam bâtard ! Attends {error.retry_after:.1f} secondes avant de réutiliser !price.")
         
 
 
