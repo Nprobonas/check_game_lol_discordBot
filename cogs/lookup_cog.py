@@ -63,7 +63,7 @@ class RiotAPI(commands.Cog):
 
 
 
-    def create_player_embed(summoner_data: dict, rank_data: dict, riot_id: str) -> discord.Embed:
+    def create_player_embed(self,summoner_data: dict, rank_data: dict, riot_id: str) -> discord.Embed:
         # Toujours afficher le Riot ID
         embed = discord.Embed(
             title=f"🔍 Profil de {riot_id}",
@@ -87,14 +87,14 @@ class RiotAPI(commands.Cog):
                 winrate = round((wins / (wins + losses)) * 100, 1)
             else:
                 winrate = 0
-                rank_emoji = {
+            rank_emoji = {
                     'IRON': '🤎', 'BRONZE': '🥉', 'SILVER': '🥈', 'GOLD': '🥇',
                     'PLATINUM': '💎', 'EMERALD': '<3', 'DIAMOND': '💎', 'MASTER': '👑',
                     'GRANDMASTER': '👑', 'CHALLENGER': '🏆'
-                }.get(tier, '❓')
-                embed.add_field(
+            }.get(tier, '❓')
+            embed.add_field(
                 name="🏆 Rang Solo/Duo",
-                    value=f"{rank_emoji} **{tier.title()} {rank}** ({lp} LP)\n"
+                value=f"{rank_emoji} **{tier.title()} {rank}** ({lp} LP)\n"
                      f"📊 **Winrate:** {winrate}% ({wins}W / {losses}L)",
                 inline=False
             )
