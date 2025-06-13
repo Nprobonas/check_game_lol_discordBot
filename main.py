@@ -23,7 +23,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'{bot.user} le Krab jusiticer est connecté !')
-  
+
 async def main():
     #Endroit pour charger les Cogs Discord
     await bot.load_extension("cogs.lookup_cog")

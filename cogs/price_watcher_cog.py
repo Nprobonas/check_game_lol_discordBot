@@ -14,7 +14,7 @@ load_dotenv()
 CMC_API_KEY=os.getenv('CMC_API_KEY')
 
 @dataclass
-class CryptoPriceWatcher(commands.Cog):
+class CryptoPriceWatcher():
     price: float
     change_24h: float
     change_7d: float
@@ -163,8 +163,23 @@ class PriceMonitorBot(commands.Cog):
                 embed.set_footer(text=f"Dernière mise à jour : {data.timestamp.strftime('%d/%m/%Y %H:%M:%S')}")
                 await ctx.send(embed=embed)
             else:
-                await ctx.send(f"❌ Erreur API -> Impossible de récupérer le prix pour {symbol.upper()}.")
+                await ctx.send(f"❌ Erreur API -> Impossible de récupérer le prix pour {symbol.upper()}. \n Essaye !price SOL")
         
+        
+    @commands.command(name='help_price')
+    async def help_price(self,ctx):
+        embed = discord.Embed(
+            title="Commandes du watcher prix cryptos",
+            description="**IMPORTANT** :  Utilise !price [nom_crypto] afin d'afficher le prix et le sentiment du marché",
+            color=0x00ff00
+        )
+        embed.add_field(
+            name="!price SOL",
+            value="Affiche les informations et le sentiment du marché sur un symbol crypto",
+            inline=False
+    )
+        await ctx.send(embed=embed)
+            
         
     # @price.error
     # async def price_error(self, ctx, error):
