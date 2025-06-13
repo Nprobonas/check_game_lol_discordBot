@@ -28,7 +28,7 @@ class PromoGame(commands.Cog):
 
     response = requests.get(url, params=params)
     data = response.json()
-
+    print(data)
     for deal in data["list"]:
         title = deal["title"]
         price_old = deal["price_old"]
