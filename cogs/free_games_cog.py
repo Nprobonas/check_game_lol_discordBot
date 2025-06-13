@@ -1,8 +1,12 @@
 import requests
 import discord
+import os
 from dotenv import load_dotenv
 from discord.ext import commands
 
+
+load_dotenv()
+API_GAME=os.getenv('API_GAME')
 
 
 class PromoGame(commands.Cog):
@@ -10,9 +14,9 @@ class PromoGame(commands.Cog):
    
     def __init__(self, bot):
        self.bot = bot
+       self.api_key = os.getenv('API_GAME')
     
     url = "https://api.isthereanydeal.com/v01/deals/list/"
-
     params = {
         "key" : API_KEY,
         "région" : "fr",
