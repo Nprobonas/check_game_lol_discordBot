@@ -18,7 +18,7 @@ class PromoGame(commands.Cog):
     
     url = "https://api.isthereanydeal.com/v01/deals/list/"
     params = {
-        "key" : API_KEY,
+        "key" : API_GAME,
         "région" : "fr",
         "country" : "FR",
         "shops" : "steam,epic,gog,ubisoft,origin,rockstar",
