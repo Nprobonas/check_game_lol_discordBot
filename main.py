@@ -22,15 +22,15 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 # Event du démarrage du bot
 @bot.event
 async def on_ready():
-    print(f'{bot.user} le Krab jusiticer est connecté !')
+    print(f'{bot.user} le Krab justicier est connecté !')
 
 async def main():
-    #Endroit pour charger les Cogs Discord
+    # Endroit pour charger les Cogs Discord
     await bot.load_extension("cogs.lookup_cog")
     await bot.load_extension("cogs.clown_cog")
     await bot.load_extension("cogs.price_watcher_cog")
     await bot.load_extension("cogs.fng_cog")
-    await bot.load_extension("cogs.free_games_cog")
+   # await bot.load_extension("cogs.free_games_cog")
     print("Cogs chargés avec succès !")
     
     # Start du bot via le token Discord
